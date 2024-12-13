@@ -1,0 +1,102 @@
+Table Name: MarketIndex  
+Table Description: This table stores details of various market indices, including their names, related data sources, types, and associated vendors. It tracks the active dates for each index, whether it's a primary index, and any notes relevant to the index.
+column Name: FundName
+column Description: This column is used to identify the Market Index by its friendly or popular name in the market. You can use this column to identify the market index.
+column Name :DataSourceId
+column Description: An identifier linking the market index to its data source, represented as an integer. This establishes the origin of the data for the market index.
+column Name: EndDate
+column Discription: The date when the market index data ceases or becomes inactive, stored in the DATE format. This may be null if the end date is unspecified.
+column Name:MarketIndexId
+column Description:  A unique identifier for each market index record, set to auto-increment for each new entry. MarketIndexId can be used to make a join with EntityId of Valuation table.
+column Name: MarketIndexShortName
+column Description: The full name of the market index, stored as a Unicode string with a maximum length of 255 characters. This field is case-insensitive and uses the SQL_Latin1_General_CP1_CI_AS collation.
+column Name: MarketIndexTypeId
+column Description: The full name of the market index, stored as a Unicode string with a maximum length of 255 characters. This field is case-insensitive and uses the SQL_Latin1_General_CP1_CI_AS collation.
+column Name: StartDate
+column Description:  The date when the market index data begins or became active, stored in the DATE format. This may be null if the start date is unspecified.
+column Name: VendorId
+column Description: An optional identifier indicating the vendor providing the market index data, represented as an integer. This field can be null if there is no specified vendor.
+---
+
+Table Name: Valuations  
+Table Description: This table records valuation data for different entities, capturing the valuation date, type, and associated values. It also specifies whether the valuation is estimated or actual and includes user and timestamp details for tracking modifications.
+column Name: DataSourceId
+column Description: An identifier linking the valuation to its data source, represented as an integer. This establishes the origin of the valuation data.
+column Name: EntityId
+column Description: A unique identifier for the specific entity being valued, allowing the table to link to different entities for example MarketIndexId from MarketIndex Table. This is a required integer field.
+column Name: EntityTypeId
+column Description: An identifier representing the type of entity being valued, such as a Index or Market Index, asset, Portfolio etc. This column can be used to form JOIN with EntityType table.
+column Name: EstimateActual
+column Description: A single-character field (NVARCHAR(1)) to indicate if the valuation is an estimate ("E") or an actual value ("A"). This field uses a case-insensitive collation and is required.
+column Name: FrequencyId
+column Description: An identifier that indicates the frequency of the valuation, such as daily, monthly, or yearly, represented as an integer. This helps define the valuation's reporting cadence. This column can be used to join the frequency table on FrequencyId column.
+column Name: ValuationId
+column Description: A unique identifier for each valuation record, automatically incremented for new entries. This field is the primary key.
+columm Name: ValuationTypeId
+column Description: An identifier representing the type of valuation, such as fair market value, book value, or discounted cash flow value. This is a required integer field.
+column Name: Value
+column Description:The actual valuation amount, stored as a decimal with up to 22 digits, including 8 decimal places for precision. This is a required field.
+
+
+---
+
+Table Name: EntityType  
+Table Description: This table defines types of entities that the system recognizes, such as "Asset" or "Portfolio." It includes an optional database table name and identifier, establishing classifications for entities referenced in other tables.
+column Name: EntityTypeId
+column Description: The name of the entity type, such as "Asset," "Portfolio," or "Index". This column can be used to form JOIN with Valuations table.
+column Name: EntityTypeName
+column Description: A unique identifier for each entity type, stored as an integer. This is the primary key for the table and is required to uniquely define each entity type.
+
+---
+
+Table Name: Frequency  
+Table Description: This table defines various time intervals or frequencies, such as daily or weekly, with a unique identifier and abbreviation for each. It standardizes frequency types for use in other tables referencing time intervals.
+column Name: Frequency
+column Description: The name of the frequency interval, such as "Daily" or "Weekly." It is stored as a Unicode string with a maximum length of 100 characters. This field is case-insensitive, required, and provides a full description of the frequency type.
+column Name: FrequencyId
+column Description: A unique identifier for each frequency record, set to auto-increment starting from 0. This integer is the primary key for the table and uniquely distinguishes each frequency type.
+
+---
+
+Table Name: ValuationType  
+Table Description: This table defines different types of valuations, like "Rate of Return" (ROR) and "Net Asset Value" (NAV), by assigning each a unique identifier and a descriptive name. It standardizes valuation types for use across other tables.
+column Name: ValuationType
+column Description: The name or label of the valuation type, such as "ROR" (Rate of Return), "NAV" (Net Asset Value), or "Asset AUM" (Assets Under Management). This is a required Unicode string with a maximum length of 100 characters. It uses a case-insensitive collation.
+column Name: ValuationTypeId
+column Description:  A unique identifier for each valuation type, set to auto-increment starting from 1. This integer serves as the primary key and is required to uniquely identify each valuation type.
+
+---
+
+Table Name: Classifications  
+Table Description: This table organizes classifications in a hierarchical structure, allowing entities to be grouped by different categories and levels. It includes attributes for the classification name, order, hierarchy level, and tracking of modifications.
+column Name: ClassificationId
+column Description: A unique identifier for each classification, set to auto-increment starting from 1. This integer serves as the primary key for the table and uniquely identifies each classification entry.
+column Name:FullName
+column Description:The full descriptive name of the classification, such as "Asset Class" or "Equities." It is stored as a Unicode string with a maximum length of 200 characters, using case-insensitive collation. This field can be null.
+column Name: ModifiedDate
+column Description: The date and time when the entry was last modified, stored in DATETIME format. This is a required field to record the modification timestamp.
+
+---
+
+Table Name: ClassificationXref  
+Table Description: This table establishes cross-references between classifications and other entities or items, allowing flexible relationships within the classification structure. It links classifications to specific reference types and identifiers, tracking associations between classifications and external entities.
+column Name: ReferenceId
+column Description: An integer identifying the specific entity or item being referenced in association with the classification. This is a required field, and its value is dependent on the ReferenceTypeId.
+column Name: ReferenceTypeId
+column Description: An integer representing the type of reference associated with the classification. This could indicate different categories or types of references within the classification system and is required.
+
+---
+Table Name: Asset
+Table Description: This table holds the records of assets including Asset Name, Short Name, Strategy Description etc.
+column Name: AssetName
+column Description: This columns holds the full asset names
+column Name: ShortName
+column Description: This columns holds the shorts names for each asset. This can be used to identify the assets.
+Column Name:AssetInceptionDate
+Column Description: This column tell the date on which this asset has been Incepted 
+Column Name: StrategyDescription
+Column Description: This columns tells us the Strategy behind forming this Asset fund.
+Column Name: AssetTypeId
+Column Description: This column can be used to for making joins with Entityid of valuation table.
+
+
